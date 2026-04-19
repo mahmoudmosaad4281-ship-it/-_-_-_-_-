@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>مسبحة إلكترونية - صدقة جارية</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green: #485c1a;
+      --gold: #c8a84b;
+      --gold-light: #e6c96a;
+      --cream: #faf6ef;
+      --dark: #0f2d1e;
+      --text: #2c1810;
+      --muted: #7a6550;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Background pattern */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 20% 20%, rgba(26,92,58,0.06) 0%, transparent 50%),
+        radial-gradient(circle at 80% 80%, rgba(200,168,75,0.08) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 0 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      padding: 32px 0 24px;
+    }
+
+    .bismillah {
+      font-family: 'Amiri', serif;
+      font-size: 22px;
+      color: var(--gold);
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      opacity: 0;
+      animation: fadeDown 0.6s ease forwards 0.1s;
+    }
+
+    .site-title {
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: fadeDown 0.6s ease forwards 0.2s;
+    }
+
+    /* Name card */
+    .name-card {
+      background: linear-gradient(135deg, var(--green) 0%, #0f3d25 100%);
+      border-radius: 20px;
+      padding: 28px 24px;
+      text-align: center;
+      margin: 8px 0 20px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(15,45,30,0.25);
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.3s;
+    }
+
+    .name-card::before {
+      content: '☽';
+      position: absolute;
+      top: -20px;
+      left: -10px;
+      font-size: 100px;
+      color: rgba(255,255,255,0.03);
+    }
+
+    .name-card::after {
+      content: '☾';
+      position: absolute;
+      bottom: -30px;
+      right: 10px;
+      font-size: 120px;
+      color: rgba(200,168,75,0.06);
+    }
+
+    .rahma-label {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      margin-bottom: 6px;
+      letter-spacing: 1px;
+    }
+
+    .deceased-name {
+      font-family: 'Amiri', serif;
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .dua-text {
+      font-size: 13px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      font-style: italic;
+    }
+
+    .gold-divider {
+      width: 60px;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+      margin: 12px auto;
+    }
+
+    /* Tasbih counter */
+    .tasbih-section {
+      opacity: 0;
+      animation: fadeUp 0.6s ease forwards 0.4s;
+    }
+
+    .counter-display {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .counter-number {
+      font-size: 72px;
+      font-weight: 700;
+      color: var(--green);
+      line-height: 1;
+      transition: transform 0.1s ease;
+    }
+
+    .counter-number.bump {
+      transform: scale(1.15);
+    }
+
+    .counter-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* Tasbih bead button */
+    .tasbih-btn {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: none;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto 20px;
+      position: relative;
+      background: radial-gradient(circle at 35% 35%, #2e7a51, var(--green) 60%, #0a2415);
+      box-shadow:
+        0 8px 24px rgba(15,45,30,0.4),
+        inset 0 2px 4px rgba(255,255,255,0.12),
+        inset 0 -3px 6px rgba(0,0,0,0.3);
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      touch-action: manipulation;
+    }
+
+    .tasbih-btn:active {
+      transform: scale(0.93);
+      box-shadow:
+        0 4px 12px rgba(15,45,30,0.35),
+        inset 0 2px 4px rgba(255,255,255,0.08),
+        inset 0 -2px 4px rgba(0,0,0,0.3);
+    }
+
+    .tasbih-btn::before {
+      content: '📿';
+      font-size: 50px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Ripple */
+    .ripple-ring {
+      position: absolute;
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      opacity: 0;
+      pointer-events: none;
+      animation: none;
+    }
+
+    .ripple-ring.animate {
+      animation: ripple 0.5s ease-out forwards;
+    }
+
+    @keyframes ripple {
+      0% { transform: translate(-50%, -50%) scale(0.9); opacity: 0.8; }
+      100% { transform: translate(-50%, -50%) scale(1.7); opacity: 0; }
+    }
+
+    .btn-wrapper {
+      position: relative;
+      width: 140px;
+      margin: 0 auto 20px;
+    }
+
+    /* Phrases tabs */
+    .phrases {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .phrase-btn {
+      padding: 8px 16px;
+      border-radius: 30px;
+      border: 1.5px solid;
+      font-size: 13px;
+      font-family: 'Cairo', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s;
+      font-weight: 600;
+    }
+
+    .phrase-btn.active {
+      background: var(--green);
+      color: #fff;
+      border-color: var(--green);
+    }
+
+    .phrase-btn:not(.active) {
+      background: transparent;
+      color: var(--green);
+      border-color: rgba(26,92,58,0.3);
+    }
+
+    .phrase-btn:not(.active):hover {
+      background: rgba(26,92,58,0.06);
+    }
+
+    .current-phrase {
+      text-align: center;
+      font-family: 'Amiri', serif;
+      font-size: 26px;
+      color: var(--green);
+      margin-bottom: 6px;
+    }
+
+    .phrase-count-info {
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    /* Progress */
+    .progress-bar {
+      background: rgba(26,92,58,0.1);
+      border-radius: 8px;
+      height: 8px;
+      margin: 0 0 20px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--green), var(--gold));
+      border-radius: 8px;
+      transition: width 0.3s ease;
+      width: 0%;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .stat-box {
+      flex: 1;
+      background: #fff;
+      border-radius: 14px;
+      padding: 14px 10px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .stat-number {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 2px;
+    }
+
+    /* Reset */
+    .reset-btn {
+      display: block;
+      width: 100%;
+      padding: 12px;
+      background: transparent;
+      border: 1.5px solid rgba(26,92,58,0.25);
+      border-radius: 12px;
+      color: var(--muted);
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 20px;
+    }
+
+    .reset-btn:hover {
+      border-color: var(--green);
+      color: var(--green);
+    }
+
+    /* Share */
+    .share-section {
+      background: #fff;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+      border: 1px solid rgba(0,0,0,0.05);
+      text-align: center;
+    }
+
+    .share-title {
+      font-size: 14px;
+      color: var(--text);
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .share-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
+      background: #25D366;
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s;
+    }
+
+    .share-btn:hover { transform: scale(1.03); }
+
+    /* Dua card */
+    .dua-card {
+      background: linear-gradient(135deg, #fffbf2, #fef6e4);
+      border: 1px solid rgba(200,168,75,0.2);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .dua-card-title {
+      font-size: 13px;
+      color: var(--gold);
+      font-weight: 700;
+      margin-bottom: 12px;
+      text-align: center;
+    }
+
+    .dua-card-text {
+      font-family: 'Amiri', serif;
+      font-size: 16px;
+      color: var(--text);
+      line-height: 2;
+      text-align: center;
+    }
+
+    /* Completion overlay */
+    .completion {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(10,30,18,0.85);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(4px);
+    }
+
+    .completion.show { display: flex; }
+
+    .completion-box {
+      background: var(--cream);
+      border-radius: 24px;
+      padding: 36px 28px;
+      text-align: center;
+      max-width: 320px;
+      width: 90%;
+      animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .completion-emoji { font-size: 48px; margin-bottom: 12px; }
+
+    .completion-title {
+      font-family: 'Amiri', serif;
+      font-size: 26px;
+      color: var(--green);
+      margin-bottom: 8px;
+    }
+
+    .completion-text {
+      font-size: 13px;
+      color: var(--muted);
+      margin-bottom: 20px;
+      line-height: 1.7;
+    }
+
+    .completion-action {
+      padding: 12px 24px;
+      background: var(--green);
+      color: #fff;
+      border: none;
+      border-radius: 30px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Create new form */
+    .create-section {
+      background: var(--green);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+      color: #fff;
+    }
+
+    .create-section h3 {
+      font-size: 16px;
+      margin-bottom: 16px;
+      opacity: 0.9;
+    }
+
+    .name-input {
+      width: 100%;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: none;
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      font-family: 'Cairo', sans-serif;
+      font-size: 15px;
+      text-align: center;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    .name-input::placeholder { color: rgba(255,255,255,0.5); }
+
+    .create-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--gold);
+      color: var(--dark);
+      border: none;
+      border-radius: 12px;
+      font-family: 'Cairo', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .create-btn:hover { background: var(--gold-light); }
+
+    /* Adhkar Section */
+    .adhkar-section {
+      margin-bottom: 20px;
+    }
+
+    .adhkar-card {
+      background: linear-gradient(135deg, var(--green) 0%, #0f3d25 100%);
+      border-radius: 16px;
+      padding: 16px 20px;
+      margin-bottom: 4px;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      box-shadow: 0 4px 16px rgba(15,45,30,0.2);
+    }
+
+    .adhkar-card:hover { opacity: 0.92; }
+
+    .adhkar-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .adhkar-icon { font-size: 20px; }
+
+    .adhkar-title {
+      flex: 1;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .adhkar-arrow {
+      color: var(--gold);
+      font-size: 13px;
+      transition: transform 0.3s;
+    }
+
+    .adhkar-arrow.open { transform: rotate(180deg); }
+
+    .adhkar-body {
+      display: none;
+      background: #fff;
+      border-radius: 0 0 16px 16px;
+      padding: 16px;
+      margin-bottom: 12px;
+      border: 1px solid rgba(26,92,58,0.1);
+      border-top: none;
+    }
+
+    .adhkar-body.open { display: block; }
+
+    .adhkar-intention {
+      background: linear-gradient(135deg, #fffbf2, #fef6e4);
+      border: 1px solid rgba(200,168,75,0.3);
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-family: 'Amiri', serif;
+      font-size: 14px;
+      color: var(--text);
+      text-align: center;
+      margin-bottom: 16px;
+      line-height: 1.7;
+    }
+
+    .adhkar-text {
+      font-family: 'Amiri', serif;
+      font-size: 20px;
+      color: var(--green);
+      line-height: 2.2;
+      text-align: center;
+    }
+
+    .dhikr-item {
+      display: flex;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+
+    .dhikr-item:last-child { border-bottom: none; }
+
+    .dhikr-num {
+      min-width: 30px;
+      height: 30px;
+      background: var(--green);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 700;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+
+    .dhikr-content { flex: 1; }
+
+    .dhikr-text {
+      font-family: 'Amiri', serif;
+      font-size: 17px;
+      color: var(--text);
+      line-height: 2;
+      margin-bottom: 6px;
+    }
+
+    .dhikr-repeat {
+      display: inline-block;
+      background: rgba(72,92,26,0.1);
+      color: var(--green);
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .dhikr-expand {
+      color: var(--gold);
+      cursor: pointer;
+      font-size: 14px;
+      text-decoration: underline;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 20px 0 32px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Animations */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Floating particles */
+    .particles {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .particle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--gold);
+      opacity: 0;
+      animation: float linear infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(100vh) scale(0); opacity: 0; }
+      10% { opacity: 0.4; }
+      90% { opacity: 0.4; }
+      100% { transform: translateY(-20px) scale(1); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="particles" id="particles"></div>
+
+<div class="container">
+  <div class="header">
+    <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
+    <div class="site-title">مسبحة إلكترونية — صدقة جارية</div>
+  </div>
+
+  <div class="name-card">
+    <div class="rahma-label">اللهم ارحمه واتغمده  برحمتك</div>
+    <div class="deceased-name" id="displayName">مسعد مقلد</div>
+    <div class="gold-divider"></div>
+    <div class="dua-text">اللهم هب ثواب هذاإلى روح أبي</div>
+  </div>
+
+  <div class="tasbih-section">
+    <div class="phrases">
+      <button class="phrase-btn active" onclick="setPhrase('سبحان الله', this)">سبحان الله</button>
+      <button class="phrase-btn" onclick="setPhrase('الحمد لله', this)">الحمد لله</button>
+      <button class="phrase-btn" onclick="setPhrase('الله أكبر', this)">الله أكبر</button>
+    </div>
+
+    <div class="current-phrase" id="currentPhrase">سبحان الله</div>
+    <div class="phrase-count-info" id="phraseInfo">اضغط لتبدأ التسبيح • الهدف: 33 مرة</div>
+
+    <div class="counter-display">
+      <div class="counter-number" id="counter">0</div>
+      <div class="counter-label">عدد التسبيحات</div>
+    </div>
+
+    <div class="progress-bar">
+      <div class="progress-fill" id="progressFill"></div>
+    </div>
+
+    <div class="btn-wrapper">
+      <div class="ripple-ring" id="ripple"></div>
+      <button class="tasbih-btn" id="tasbihBtn" onclick="count()"></button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-number" id="totalCount">0</div>
+        <div class="stat-label">إجمالي التسبيحات</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="roundsCount">0</div>
+        <div class="stat-label">عدد الأدوار</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-number" id="participantsCount">1</div>
+        <div class="stat-label">المشاركون</div>
+      </div>
+    </div>
+
+    <button class="reset-btn" onclick="reset()">↺ إعادة العدّ من الصفر</button>
+  </div>
+
+  <div class="share-section">
+    <div class="share-title">📤 شارك هذه المسبحة</div>
+    <a href="#" class="share-btn" onclick="share(); return false;">
+      <span>📱</span> أرسل عبر واتساب
+    </a>
+  </div>
+
+  <div class="dua-card">
+    <div class="dua-card-title">🤲الدعاء للمتوفي</div>
+    <div class="dua-card-text" id="duaText">
+      اللهم اغفر لـمسعد مقلد وارحمه وعافه واعف عنه<br>
+      وأكرم نُزُله ووسّع مُدخَله<br>
+      واغسله بالماء والثلج والبَرَد<br>
+      ونقّه من الخطايا كما نقّيتَ الثوبَ الأبيضَ من الدّنَس
+    </div>
+  </div>
+<div class="dua-card">
+  <div class="dua-card-title">📖 علي روح أبي</div>
+  <div class="dua-card-text">
+    صدقة جارية عن روح المرحوم <strong>مسعد مقلد</strong><br><br>
+    يمكنك الانتفاع بزاد الحفاظ وإهداء ثوابه له 🤲<br><br>
+
+    <a href="http://t.me/alathar1218" target="_blank"
+       style="display:inline-block;
+              padding:12px 22px;
+              background:#0088cc;
+              color:#fff;
+              border-radius:30px;
+              text-decoration:none;
+              font-weight:bold;">
+      📥 دخول الصفحه هذه كل ما فيها صدقة جاريه
+      </a>
+    <a href="https://drive.google.com/drive/folders/1KA2EkueVEh3Yfd-zkbmJN1vzokeydnx1" target="_blank"
+       style="display:inline-block;
+              padding:12px 22px;
+              background:#adcc00;
+              color:#fff;
+              border-radius:30px;
+              text-decoration:none;
+              font-weight:bold;">
+              📖زاد الحفاظ للقرءان الكريم صدقه جاريه
+  </a>
+
+  </div>
+</div>
+  <!-- أذكار Section -->
+  <div class="adhkar-section">
+
+    <!-- الفاتحة -->
+    <div class="adhkar-card" onclick="toggleAdhkar('fatiha')">
+      <div class="adhkar-header">
+        <span class="adhkar-icon">📖</span>
+        <span class="adhkar-title">سورة الفاتحة</span>
+        <span class="adhkar-arrow" id="arrow-fatiha">▼</span>
+      </div>
+    </div>
+    <div class="adhkar-body" id="body-fatiha">
+      <div class="adhkar-intention">اللهم اجعل ثواب هذه السورة الكريمة صدقةً جاريةً لروح المرحوم مسعد مقلد</div>
+      <div class="adhkar-text">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br>
+        الْحَمْدُ لِلَّهِ رَبِّ الْعَالَمِينَ ﴿١﴾
+        الرَّحْمَٰنِ الرَّحِيمِ ﴿٢﴾
+        مَالِكِ يَوْمِ الدِّينِ ﴿٣﴾
+        إِيَّاكَ نَعْبُدُ وَإِيَّاكَ نَسْتَعِينُ ﴿٤﴾
+        اهْدِنَا الصِّرَاطَ الْمُسْتَقِيمَ ﴿٥﴾
+        صِرَاطَ الَّذِينَ أَنْعَمْتَ عَلَيْهِمْ غَيْرِ الْمَغْضُوبِ عَلَيْهِمْ وَلَا الضَّالِّينَ ﴿٦﴾
+      </div>
+    </div>
+
+    <div class="adhkar-card" onclick="toggleAdhkar('ikhlas')">
+      <div class="adhkar-header">
+        <span class="adhkar-icon">📖</span>
+        <span class="adhkar-title">سورة الإخلاص</span>
+        <span class="adhkar-arrow" id="arrow-ikhlas">▼</span>
+      </div>
+    </div>
+    <div class="adhkar-body" id="body-ikhlas">
+      <div class="adhkar-intention">اللهم اجعل ثواب هذه السورة الكريمة صدقةً جاريةً لروح المرحوم مسعد مقلد</div>
+      <div class="adhkar-text">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br><br>
+        قُلْ هُوَ اللَّهُ أَحَدٌ ﴿١﴾ اللَّهُ الصَّمَدُ ﴿٢﴾ لَمْ يَلِدْ وَلَمْ يُولَدْ ﴿٣﴾ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ ﴿٤﴾
+      </div>
+    </div>
+
+    <div class="adhkar-card" onclick="toggleAdhkar('falaq')">
+      <div class="adhkar-header">
+        <span class="adhkar-icon">📖</span>
+        <span class="adhkar-title">سورة الفلق</span>
+        <span class="adhkar-arrow" id="arrow-falaq">▼</span>
+      </div>
+    </div>
+    <div class="adhkar-body" id="body-falaq">
+      <div class="adhkar-intention">اللهم اجعل ثواب هذه السورة الكريمة صدقةً جاريةً لروح المرحوم مسعد مقلد</div>
+      <div class="adhkar-text">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br><br>
+        قُلْ أَعُوذُ بِرَبِّ الْفَلَقِ ﴿١﴾ مِن شَرِّ مَا خَلَقَ ﴿٢﴾ وَمِن شَرِّ غَاسِقٍ إِذَا وَقَبَ ﴿٣﴾ وَمِن شَرِّ النَّفَّاثَاتِ فِي الْعُقَدِ ﴿٤﴾ وَمِن شَرِّ حَاسِدٍ إِذَا حَسَدَ ﴿٥﴾
+      </div>
+    </div>
+
+    <div class="adhkar-card" onclick="toggleAdhkar('nas')">
+      <div class="adhkar-header">
+        <span class="adhkar-icon">📖</span>
+        <span class="adhkar-title">سورة الناس</span>
+        <span class="adhkar-arrow" id="arrow-nas">▼</span>
+      </div>
+    </div>
+    <div class="adhkar-body" id="body-nas">
+      <div class="adhkar-intention">اللهم اجعل ثواب هذه السورة الكريمة صدقةً جاريةً لروح المرحوم مسعد مقلد</div>
+      <div class="adhkar-text">
+        بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ<br><br>
+        قُلْ أَعُوذُ بِرَبِّ النَّاسِ ﴿١﴾ مَلِكِ النَّاسِ ﴿٢﴾ إِلَٰهِ النَّاسِ ﴿٣﴾ مِن شَرِّ الْوَسْوَاسِ الْخَنَّاسِ ﴿٤﴾ الَّذِي يُوَسْوِسُ فِي صُدُورِ النَّاسِ ﴿٥﴾ مِنَ الْجِنَّةِ وَالنَّاسِ ﴿٦﴾
+      </div>
+    </div>
+
+    <!-- أذكار الصباح -->
+    <div class="adhkar-card" onclick="toggleAdhkar('sabah')">
+      <div class="adhkar-header">
+        <span class="adhkar-icon">🌅</span>
+        <span class="adhkar-title">أذكار الصباح</span>
+        <span class="adhkar-arrow" id="arrow-sabah">▼</span>
+      </div>
+    </div>
+    <div class="adhkar-body" id="body-sabah">
+      <div class="adhkar-intention">اللهم اجعل ثواب هذه الأذكار صدقةً جاريةً لروح المرحوم مسعد مقلد</div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">١</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ <span class="dhikr-expand" onclick="expandDhikr(this)">[ اضغط لعرض آية الكرسي كاملة ]</span><span class="dhikr-full" style="display:none">ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ ﴿٢٥٥ البقرة﴾</span></div>
+          <div class="dhikr-repeat">مرة واحدة — آية الكرسي</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٢</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ</div>
+          <div class="dhikr-repeat">٣ مرات — قل هو الله أحد + المعوذتان</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٣</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">أَصْبَحْنَا وَأَصْبَحَ الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</div>
+          <div class="dhikr-repeat">مرة واحدة</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٤</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ بِكَ أَصْبَحْنَا، وَبِكَ أَمْسَيْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ النُّشُورُ</div>
+          <div class="dhikr-repeat">مرة واحدة</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٥</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ</div>
+          <div class="dhikr-repeat">مرة واحدة — سيد الاستغفار</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٦</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ إِنِّي أَصْبَحْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ</div>
+          <div class="dhikr-repeat">٤ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٧</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ</div>
+          <div class="dhikr-repeat">٣ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٨</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ</div>
+          <div class="dhikr-repeat">٣ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٩</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</div>
+          <div class="dhikr-repeat">٣ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">١٠</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">رَضِيتُ بِاللَّهِ رَبًّا، وَبِالْإِسْلَامِ دِينًا، وَبِمُحَمَّدٍ ﷺ نَبِيًّا وَرَسُولًا</div>
+          <div class="dhikr-repeat">٣ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">١١</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</div>
+          <div class="dhikr-repeat">١٠٠ مرة</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">١٢</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</div>
+          <div class="dhikr-repeat">١٠ مرات</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- أذكار المساء -->
+    <div class="adhkar-card" onclick="toggleAdhkar('masaa')">
+      <div class="adhkar-header">
+        <span class="adhkar-icon">🌙</span>
+        <span class="adhkar-title">أذكار المساء</span>
+        <span class="adhkar-arrow" id="arrow-masaa">▼</span>
+      </div>
+    </div>
+    <div class="adhkar-body" id="body-masaa">
+      <div class="adhkar-intention">اللهم اجعل ثواب هذه الأذكار صدقةً جاريةً لروح المرحوم مسعد مقلد</div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">١</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُ لَا إِلَٰهَ إِلَّا هُوَ الْحَيُّ الْقَيُّومُ ۚ لَا تَأْخُذُهُ سِنَةٌ وَلَا نَوْمٌ <span class="dhikr-expand" onclick="expandDhikr(this)">[ اضغط لعرض آية الكرسي كاملة ]</span><span class="dhikr-full" style="display:none">ۚ لَّهُ مَا فِي السَّمَاوَاتِ وَمَا فِي الْأَرْضِ ۗ مَن ذَا الَّذِي يَشْفَعُ عِندَهُ إِلَّا بِإِذْنِهِ ۚ يَعْلَمُ مَا بَيْنَ أَيْدِيهِمْ وَمَا خَلْفَهُمْ ۖ وَلَا يُحِيطُونَ بِشَيْءٍ مِّنْ عِلْمِهِ إِلَّا بِمَا شَاءَ ۚ وَسِعَ كُرْسِيُّهُ السَّمَاوَاتِ وَالْأَرْضَ ۖ وَلَا يَئُودُهُ حِفْظُهُمَا ۚ وَهُوَ الْعَلِيُّ الْعَظِيمُ ﴿٢٥٥ البقرة﴾</span></div>
+          <div class="dhikr-repeat">مرة واحدة — آية الكرسي</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٢</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">قُلْ هُوَ اللَّهُ أَحَدٌ ۝ اللَّهُ الصَّمَدُ ۝ لَمْ يَلِدْ وَلَمْ يُولَدْ ۝ وَلَمْ يَكُن لَّهُ كُفُوًا أَحَدٌ</div>
+          <div class="dhikr-repeat">٣ مرات — قل هو الله أحد + المعوذتان</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٣</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">أَمْسَيْنَا وَأَمْسَى الْمُلْكُ لِلَّهِ، وَالْحَمْدُ لِلَّهِ، لَا إِلَهَ إِلَّا اللَّهُ وَحْدَهُ لَا شَرِيكَ لَهُ، لَهُ الْمُلْكُ وَلَهُ الْحَمْدُ وَهُوَ عَلَى كُلِّ شَيْءٍ قَدِيرٌ</div>
+          <div class="dhikr-repeat">مرة واحدة</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٤</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ بِكَ أَمْسَيْنَا، وَبِكَ أَصْبَحْنَا، وَبِكَ نَحْيَا، وَبِكَ نَمُوتُ، وَإِلَيْكَ الْمَصِيرُ</div>
+          <div class="dhikr-repeat">مرة واحدة</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٥</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ أَنْتَ رَبِّي لَا إِلَهَ إِلَّا أَنْتَ، خَلَقْتَنِي وَأَنَا عَبْدُكَ، وَأَنَا عَلَى عَهْدِكَ وَوَعْدِكَ مَا اسْتَطَعْتُ، أَعُوذُ بِكَ مِنْ شَرِّ مَا صَنَعْتُ، أَبُوءُ لَكَ بِنِعْمَتِكَ عَلَيَّ وَأَبُوءُ بِذَنْبِي، فَاغْفِرْ لِي فَإِنَّهُ لَا يَغْفِرُ الذُّنُوبَ إِلَّا أَنْتَ</div>
+          <div class="dhikr-repeat">مرة واحدة — سيد الاستغفار</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٦</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ إِنِّي أَمْسَيْتُ أُشْهِدُكَ وَأُشْهِدُ حَمَلَةَ عَرْشِكَ وَمَلَائِكَتَكَ وَجَمِيعَ خَلْقِكَ أَنَّكَ أَنْتَ اللَّهُ لَا إِلَهَ إِلَّا أَنْتَ وَحْدَكَ لَا شَرِيكَ لَكَ وَأَنَّ مُحَمَّدًا عَبْدُكَ وَرَسُولُكَ</div>
+          <div class="dhikr-repeat">٤ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٧</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ عَافِنِي فِي بَدَنِي، اللَّهُمَّ عَافِنِي فِي سَمْعِي، اللَّهُمَّ عَافِنِي فِي بَصَرِي، لَا إِلَهَ إِلَّا أَنْتَ</div>
+          <div class="dhikr-repeat">٣ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٨</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْكُفْرِ وَالْفَقْرِ، وَأَعُوذُ بِكَ مِنْ عَذَابِ الْقَبْرِ، لَا إِلَهَ إِلَّا أَنْتَ</div>
+          <div class="dhikr-repeat">٣ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">٩</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">بِسْمِ اللَّهِ الَّذِي لَا يَضُرُّ مَعَ اسْمِهِ شَيْءٌ فِي الْأَرْضِ وَلَا فِي السَّمَاءِ وَهُوَ السَّمِيعُ الْعَلِيمُ</div>
+          <div class="dhikr-repeat">٣ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">١٠</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">أَعُوذُ بِكَلِمَاتِ اللَّهِ التَّامَّاتِ مِنْ شَرِّ مَا خَلَقَ</div>
+          <div class="dhikr-repeat">٣ مرات</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">١١</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">سُبْحَانَ اللَّهِ وَبِحَمْدِهِ</div>
+          <div class="dhikr-repeat">١٠٠ مرة</div>
+        </div>
+      </div>
+
+      <div class="dhikr-item">
+        <div class="dhikr-num">١٢</div>
+        <div class="dhikr-content">
+          <div class="dhikr-text">اللَّهُمَّ إِنِّي أَسْأَلُكَ الْعَفْوَ وَالْعَافِيَةَ فِي الدُّنْيَا وَالْآخِرَةِ</div>
+          <div class="dhikr-repeat">مرة واحدة</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="adhkar-card" onclick="toggleAdhkar('salawat')">
+      <div class="adhkar-header">
+        <span class="adhkar-icon">✨</span>
+        <span class="adhkar-title">الصلاة على النبي ﷺ</span>
+        <span class="adhkar-arrow" id="arrow-salawat">▼</span>
+      </div>
+    </div>
+    <div class="adhkar-body" id="body-salawat">
+      <div class="adhkar-intention">اللهم اجعل ثواب هذه الصلاة صدقةً جاريةً لروح المرحوم مسعد مقلد</div>
+      <div class="adhkar-text" style="font-size: 22px;">
+        اللهم صلِّ وسلّم وبارك على سيدنا محمد وعلى آله وصحبه أجمعين، عدد ما أحاط به علمك وخط به قلمك وأحصاه كتابك.
+        صلاةً تزيل بها الهموم، وتغفر بها الذنوب، وتشفي بها القلوب، وتشفعنا بها يوم القيامة.
+      </div>
+    </div>
+  
+
+  </div>
+  <!-- end adhkar -->
+
+  <footer>
+ . Eng Mahmoud Makled جميع الحقوق محفوظة<br>
+ اللهم اجعله صدقةً جاريةً لأبي و لكل من شارك
+
+  </footer>
+</div>
+
+<!-- Completion Modal -->
+<div class="completion" id="completionModal">
+  <div class="completion-box">
+    <div class="completion-emoji">🎉</div>
+    <div class="completion-title">أحسنتَ وبارك الله فيك</div>
+    <div class="completion-text">
+      أتممتَ دوراً من التسبيح<br>
+      اللهم اقبل منا ومن المرحوم
+    </div>
+    <button class="completion-action" onclick="continueCount()">متابعة التسبيح ▶</button>
+    <div class="dua-card-text" id="duaText"></div>
+  </div>
+</div>
+
+<script>
+  let currentCount = 0;
+  let totalCount = 0;
+  let rounds = 0;
+  let currentPhrase = 'سبحان الله';
+  const TARGET = 33;
+
+  // Fixed name
+  const fixedName = 'مسعد مقلد';
+
+  function setPhrase(phrase, btn) {
+    currentPhrase = phrase;
+    document.getElementById('currentPhrase').textContent = phrase;
+    document.querySelectorAll('.phrase-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    updateInfo();
+  }
+
+  function updateInfo() {
+    document.getElementById('phraseInfo').textContent =
+      `اضغط لتبدأ التسبيح • الهدف: ${TARGET} مرة`;
+  }
+
+  function count() {
+    currentCount++;
+    totalCount++;
+
+    const el = document.getElementById('counter');
+    el.textContent = currentCount;
+    el.classList.add('bump');
+    setTimeout(() => el.classList.remove('bump'), 100);
+
+    document.getElementById('totalCount').textContent = totalCount;
+
+    // Progress
+    const pct = Math.min((currentCount / TARGET) * 100, 100);
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    // Ripple
+    const ripple = document.getElementById('ripple');
+    ripple.classList.remove('animate');
+    void ripple.offsetWidth;
+    ripple.classList.add('animate');
+
+    // Vibrate
+    if (navigator.vibrate) navigator.vibrate(30);
+
+    // Completion
+    if (currentCount >= TARGET) {
+      rounds++;
+      document.getElementById('roundsCount').textContent = rounds;
+      setTimeout(() => {
+        document.getElementById('completionModal').classList.add('show');
+      }, 300);
+    }
+
+    // Update participants (demo)
+    if (totalCount % 7 === 0) {
+      const p = document.getElementById('participantsCount');
+      p.textContent = parseInt(p.textContent) + Math.floor(Math.random() * 2) + 1;
+    }
+  }
+
+  function reset() {
+    currentCount = 0;
+    document.getElementById('counter').textContent = '0';
+    document.getElementById('progressFill').style.width = '0%';
+  }
+
+  function continueCount() {
+    currentCount = 0;
+    document.getElementById('counter').textContent = '0';
+    document.getElementById('progressFill').style.width = '0%';
+    document.getElementById('completionModal').classList.remove('show');
+  }
+
+  function share() {
+    const name = 'مسعد مقلد';
+    const text = `🤲 شارك في تسبيح عن روح "${name}"\n\nكل تسبيحة صدقة جارية لروح المتوفى\n\n${location.href}`;
+    if (navigator.share) {
+      navigator.share({ title: 'مسبحة إلكترونية', text });
+    } else {
+      const wa = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+      window.open(wa, '_blank');
+    }
+  }
+
+  function createNew() {
+    const name = document.getElementById('newName').value.trim();
+    if (!name) {
+      document.getElementById('newName').focus();
+      return;
+    }
+    location.hash = encodeURIComponent(name);
+    location.reload();
+  }
+  function share() {
+  const name = 'مسعد مقلد';
+  const text = `🤲 صدقة جارية عن روح "${name}"
+
+كل تسبيحة وقراءة قرآن نور في قبره بإذن الله
+
+
+رابط المسبحة:
+${location.href}`;
+
+  if (navigator.share) {
+    navigator.share({ title: 'مسبحة إلكترونية', text });
+  } else {
+    const wa = `https://api.whatsapp.com/send?text=${encodeURIComponent(text)}`;
+    window.open(wa, '_blank');
+  }
+}
+
+  function toggleAdhkar(id) {
+    const body = document.getElementById('body-' + id);
+    const arrow = document.getElementById('arrow-' + id);
+    body.classList.toggle('open');
+    arrow.classList.toggle('open');
+  }
+
+  function expandDhikr(el) {
+    el.style.display = 'none';
+    el.nextElementSibling.style.display = 'inline';
+  }
+
+  // Floating particles
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 12; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random() * 100 + '%';
+    p.style.animationDuration = (8 + Math.random() * 12) + 's';
+    p.style.animationDelay = (Math.random() * 10) + 's';
+    p.style.width = p.style.height = (2 + Math.random() * 3) + 'px';
+    container.appendChild(p);
+  }
+
+  // Allow Enter key to count
+  document.addEventListener('keydown', e => {
+    if (e.code === 'Space' || e.code === 'Enter') {
+      e.preventDefault();
+      count();
+
+    }
+  });
+</script>
+</body>
+</html>
